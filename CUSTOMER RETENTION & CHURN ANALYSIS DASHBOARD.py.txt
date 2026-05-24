@@ -1,0 +1,228 @@
+# ==========================================
+# CUSTOMER RETENTION & CHURN ANALYSIS DASHBOARD
+# ==========================================
+
+# Install Required Libraries
+# pip install pandas matplotlib seaborn plotly dash
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# ------------------------------------------
+# SAMPLE DATA
+# ------------------------------------------
+
+data = {
+'Contract': ['Month-to-month', 'One year', 'Two year'],
+'ChurnRate': [42.71, 11.27, 2.83],
+'RetentionRate': [57.29, 88.73, 97.17]
+}
+
+df_contract = pd.DataFrame(data)
+
+payment = {
+'PaymentMethod': ['Electronic check', 'Mailed check',
+'Bank transfer', 'Credit card'],
+'ChurnRate': [45.00, 24.35, 16.15, 15.21]
+}
+
+df_payment = pd.DataFrame(payment)
+
+internet = {
+'InternetService': ['Fiber optic', 'DSL', 'No'],
+'Churned': [41.89, 18.96, 7.40],
+'Retained': [58.11, 81.04, 92.60]
+}
+
+df_internet = pd.DataFrame(internet)
+
+tenure = {
+'Months': ['0-6', '7-12', '13-18', '19-24',
+'25-36', '37-48', '49-60', '60+'],
+'ChurnRate': [61.80, 40.60, 30.50, 24.10,
+16.60, 11.70, 8.20, 5.60]
+}
+
+df_tenure = pd.DataFrame(tenure)
+
+# ------------------------------------------
+# STYLE
+# ------------------------------------------
+
+sns.set_style("whitegrid")
+
+# ------------------------------------------
+# DASHBOARD FIGURE
+# ------------------------------------------
+
+fig = plt.figure(figsize=(20, 12))
+fig.patch.set_facecolor('#F5F9FF')
+
+# ------------------------------------------
+# TITLE
+# ------------------------------------------
+
+plt.suptitle(
+"CUSTOMER RETENTION & CHURN ANALYSIS DASHBOARD",
+fontsize=24,
+fontweight='bold',
+color='#0B3B8C'
+)
+
+# ------------------------------------------
+# CHURN PIE CHART
+# ------------------------------------------
+
+ax1 = plt.subplot(2, 3, 1)
+
+sizes = [26.54, 73.46]
+labels = ['Churned', 'Retained']
+colors = ['#FF4B4B', '#4CC96B']
+
+ax1.pie(
+sizes,
+labels=labels,
+autopct='%1.1f%%',
+colors=colors,
+startangle=90
+)
+
+ax1.set_title("Churn Rate Overview", fontsize=16)
+
+# ------------------------------------------
+# CONTRACT TYPE CHART
+# ------------------------------------------
+
+ax2 = plt.subplot(2, 3, 2)
+
+x = np.arange(len(df_contract['Contract']))
+width = 0.35
+
+ax2.bar(
+x - width/2,
+df_contract['ChurnRate'],
+width,
+label='Churned',
+color='#FF4B4B'
+)
+
+ax2.bar(
+x + width/2,
+df_contract['RetentionRate'],
+width,
+label='Retained',
+color='#4CC96B'
+)
+
+ax2.set_xticks(x)
+ax2.set_xticklabels(df_contract['Contract'])
+
+ax2.set_ylabel("Percentage")
+ax2.set_title("Churn By Contract Type", fontsize=16)
+
+ax2.legend()
+
+# ------------------------------------------
+# PAYMENT METHOD CHART
+# ------------------------------------------
+
+ax3 = plt.subplot(2, 3, 3)
+
+sns.barplot(
+x='ChurnRate',
+y='PaymentMethod',
+data=df_payment,
+palette='Blues_r',
+ax=ax3
+)
+
+ax3.set_title("Churn By Payment Method", fontsize=16)
+
+# ------------------------------------------
+# INTERNET SERVICE CHART
+# ------------------------------------------
+
+ax4 = plt.subplot(2, 3, 4)
+
+x2 = np.arange(len(df_internet['InternetService']))
+
+ax4.bar(
+x2 - width/2,
+df_internet['Churned'],
+width,
+label='Churned',
+color='#FF4B4B'
+)
+
+ax4.bar(
+x2 + width/2,
+df_internet['Retained'],
+width,
+label='Retained',
+color='#4CC96B'
+)
+
+ax4.set_xticks(x2)
+ax4.set_xticklabels(df_internet['InternetService'])
+
+ax4.set_title("Churn By Internet Service", fontsize=16)
+
+ax4.legend()
+
+# ------------------------------------------
+# TENURE LINE CHART
+# ------------------------------------------
+
+ax5 = plt.subplot(2, 3, 5)
+
+sns.lineplot(
+x='Months',
+y='ChurnRate',
+data=df_tenure,
+marker='o',
+linewidth=3,
+color='#1E5EFF',
+ax=ax5
+)
+
+ax5.set_title("Churn By Tenure (Months)", fontsize=16)
+
+# ------------------------------------------
+# GENDER CHART
+# ------------------------------------------
+
+ax6 = plt.subplot(2, 3, 6)
+
+gender = ['Male', 'Female']
+rates = [26.16, 26.94]
+
+sns.barplot(
+x=gender,
+y=rates,
+palette='Blues',
+ax=ax6
+)
+
+ax6.set_title("Churn Rate By Gender", fontsize=16)
+
+# ------------------------------------------
+# LAYOUT
+# ------------------------------------------
+
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+# ------------------------------------------
+# SAVE DASHBOARD
+# ------------------------------------------
+
+plt.savefig(
+"customer_retention_dashboard.png",
+dpi=300,
+bbox_inches='tight'
+)
+
+plt.show()
+
+print("Dashboard Created Successfully!")
